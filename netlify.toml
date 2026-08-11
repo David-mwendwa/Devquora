@@ -1,0 +1,15 @@
+[build]
+  base = ""
+  command = "cd frontend && npm install && npm run build"
+  publish = "frontend/dist"
+
+[build.environment]
+  # Vite 8 requires Node >=20.19 or >=22.12; Netlify's default build image
+  # predates that, so the build fails silently on a Vite engine mismatch
+  # without this pin.
+  NODE_VERSION = "22"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

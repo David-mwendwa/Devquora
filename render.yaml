@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: devquora-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_LIFETIME
+        value: 7d
+      - key: COOKIE_LIFETIME
+        value: "7"
+      - key: SYNC_INTERVAL_MS
+        value: "3600000"
+      - key: MONGO_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: PROD_FRONTEND_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: DEVTO_API_KEY
+        sync: false

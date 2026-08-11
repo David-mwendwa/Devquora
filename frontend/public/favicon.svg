@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="9" fill="#292524"/>
+  <!-- Same glyph geometry as DevquoraMark in src/components/Logo.jsx, scaled to fit
+       the badge. Dots are true holes, so they pick up the badge fill above. -->
+  <g transform="translate(4.83 4.01) scale(1.09)">
+    <path fill="#c6924f" fill-rule="evenodd" clip-rule="evenodd"
+      d="M1 0H9.5C15.6 0 19.5 4.5 19.5 10.1C19.5 15.7 15.6 20.4 9.5 20.4H6.3L1 22Z
+         M3.7 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0
+         M8.35 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0
+         M13 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0"/>
+  </g>
+</svg>

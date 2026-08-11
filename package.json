@@ -1,0 +1,21 @@
+{
+  "name": "devquora",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Devquora — a minimal, developer-focused MERN blogging platform",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npx concurrently --kill-others-on-fail --names \"FRONTEND,BACKEND\" \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
+    "build": "npm run build --prefix frontend",
+    "start": "npm run dev --prefix frontend",
+    "server": "npm run dev --prefix backend",
+    "test": "concurrently --kill-others-on-fail --names \"FRONTEND,BACKEND\" \"npm test --prefix frontend\" \"npm test --prefix backend\"",
+    "test:frontend": "npm test --prefix frontend",
+    "test:backend": "npm test --prefix backend",
+    "format": "npm run format --prefix frontend && npm run format --prefix backend",
+    "install:all": "cd frontend && npm install && cd ../backend && npm install && cd .."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

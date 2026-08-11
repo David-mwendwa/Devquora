@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for Devquora",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "predev": "(lsof -ti:5001 | xargs kill -9) || true",
+    "dev": "nodemon --inspect server.js",
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles --forceExit",
+    "format": "prettier --write .",
+    "seed:demo": "node scripts/seedDemoUsers.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.40.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
+    "http-status-codes": "^2.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "slugify": "^1.6.6",
+    "validator": "^13.11.0",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

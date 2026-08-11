@@ -1,0 +1,155 @@
+/* InkEngine fonts: Inter for UI/headings (developer-tool legibility), JetBrains Mono for code. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    /* Shared background tokens (RGB triplets so Tailwind's opacity modifiers work, e.g. bg-background/90).
+       Warm cream/near-black rather than cool slate — easier on the eyes, less "busy" than a
+       saturated indigo primary sitting on a blue-tinted background. */
+    --color-background: 255 248 236; /* warm cream */
+    --color-surface: 255 253 248; /* warm off-white — cards/panels, not stark white */
+    --color-surface-muted: 245 240 227; /* warm off-white — subtle insets */
+    /* Skeleton loaders: a step further into the warm parchment/tan family than
+       surface-muted (which is too close to background to read as "loading" on its
+       own) — same hue as the rest of the palette instead of a neutral gray, but
+       desaturated relative to primary so it stays a background element. */
+    --color-skeleton: 229 221 208;
+    /* Scrollbar thumb: one step past skeleton on the same warm ramp so it's
+       visibly a scrollbar (not just a slightly-darker patch), without going
+       full dark-800 and looking like a stock OS scrollbar dropped on top. */
+    --color-scrollbar-thumb: 214 197 168;
+  }
+
+  .dark {
+    --color-background: 12 8 6; /* warm near-black */
+    --color-surface: 28 22 18; /* warm charcoal */
+    --color-surface-muted: 41 33 27; /* warm charcoal, lighter */
+    --color-skeleton: 52 45 39; /* a lighter, muted step up the same warm-brown ramp */
+    --color-scrollbar-thumb: 74 62 50;
+  }
+
+  html {
+    /* Always reserve the vertical scrollbar's width, even on short pages, so
+       filtering to fewer results (e.g. Explore's tag pills) doesn't remove the
+       scrollbar and shift the centered content sideways. */
+    scrollbar-gutter: stable;
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-scrollbar-thumb)) transparent;
+  }
+
+  /* Chrome/Safari/Edge — applied broadly so nested scroll areas (the Explore
+     tag sidebar, code blocks, the editor's textarea) pick it up too, not just
+     the page scrollbar. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-scrollbar-thumb));
+    border-radius: 9999px;
+    border: 2px solid rgb(var(--color-background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.primary.500');
+  }
+
+  /* The browser's own arrow is drawn on top of the value rather than beside it
+     once a select is this compact, so the value and the chevron collide. Swap in
+     our own chevron and reserve a gutter for it here — in base, so every select
+     in the app gets it and nobody has to remember. Individual selects should set
+     `pl-*`/`py-*` rather than `px-*`, which would override the gutter. */
+  select {
+    appearance: none;
+    padding-right: 1.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23a8a29e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 0.75rem;
+  }
+
+  body {
+    /* dark:text-dark-200, not -100 — stone-100 against the near-black background
+       measured near-white contrast and read as glaring; 200 keeps it easily legible
+       without the glare. */
+    @apply bg-background font-sans text-dark-800 antialiased dark:text-dark-200;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  /* The confirm dialog's backdrop is a pseudo-element, so no utility class can
+     reach it — same for the open/close animation. Warm near-black (the dark
+     theme's background) rather than neutral black, so the dimmed page stays in
+     the palette. */
+  .confirm-dialog::backdrop {
+    background-color: rgb(12 8 6 / 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .confirm-dialog[open] {
+    animation: dialog-in 0.16s ease-out;
+  }
+
+  .confirm-dialog[open]::backdrop {
+    animation: dialog-backdrop-in 0.16s ease-out;
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+  }
+
+  @keyframes dialog-backdrop-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .confirm-dialog[open],
+    .confirm-dialog[open]::backdrop {
+      animation: none;
+    }
+  }
+}
+
+@layer utilities {
+  /* Skeleton loading block: a light base fill with a shimmer sweep, instead of a
+     flat pulse — reads as "actively fetching" rather than "static placeholder". */
+  .skeleton {
+    @apply relative overflow-hidden bg-skeleton;
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.3), transparent);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  .dark .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.05), transparent);
+  }
+}
