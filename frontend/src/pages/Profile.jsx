@@ -169,7 +169,7 @@ const Profile = () => {
             <div className="h-px flex-1 bg-dark-200 dark:bg-dark-700" />
           </div>
 
-          <div className="flex flex-col">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}

@@ -60,16 +60,17 @@ const Activity = () => {
             </div>
             <div className="h-px flex-1 bg-dark-200 dark:bg-dark-700" />
           </div>
-          <div className="flex flex-col">
-            {data.savedPosts.length === 0 && (
-              <p className="py-6 text-dark-500">
-                No saved posts yet — hit the bookmark on any post to keep it here.
-              </p>
-            )}
-            {data.savedPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          {data.savedPosts.length === 0 ? (
+            <p className="py-6 text-dark-500">
+              No saved posts yet — hit the bookmark on any post to keep it here.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              {data.savedPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

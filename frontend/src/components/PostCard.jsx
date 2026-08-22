@@ -1,45 +1,66 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { FiMessageCircle } from 'react-icons/fi';
 
-const PostCard = ({ post }) => (
-  <article className="border-b border-dark-200 py-5 transition-colors dark:border-dark-700">
-    <div className="mb-2 flex min-w-0 items-center gap-2 text-sm text-dark-500">
-      <img
-        src={post.author.avatarUrl}
-        alt={post.author.username}
-        className="h-5 w-5 shrink-0 rounded-full"
-      />
-      <Link
-        to={`/u/${post.author.username}`}
-        className="truncate transition-colors hover:text-dark-800 dark:hover:text-dark-200">
-        {post.author.name}
-      </Link>
-      <span aria-hidden="true" className="text-dark-300 dark:text-dark-600">
-        &middot;
-      </span>
-      <span className="shrink-0">
-        {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })} &middot;{' '}
-        {post.readTimeMin} min read
-      </span>
-    </div>
+const PostCard = ({ post }) => {
+  const [coverFailed, setCoverFailed] = useState(false);
 
-    <Link to={`/post/${post.slug}`} className="block min-w-0">
-      <h2 className="font-heading text-lg font-bold text-dark-800 transition-colors hover:text-primary-600 dark:text-dark-200 sm:text-xl">
-        {post.title}
-      </h2>
-      <p className="mt-2 line-clamp-2 text-sm text-dark-500">{post.excerpt}</p>
+  return (
+  <article className="group flex flex-col overflow-hidden rounded-xl border border-dark-200 bg-surface transition-shadow hover:shadow-card dark:border-dark-700">
+    <Link to={`/post/${post.slug}`} className="block aspect-[16/9] w-full shrink-0 overflow-hidden bg-surface-muted">
+      {post.coverImageUrl && !coverFailed ? (
+        <img
+          src={post.coverImageUrl}
+          alt=""
+          onError={() => setCoverFailed(true)}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-100 to-primary-300 dark:from-primary-950 dark:to-primary-800">
+          <span className="font-heading text-3xl font-bold text-primary-700/70 dark:text-primary-200/70">
+            {post.title.charAt(0).toUpperCase()}
+          </span>
+        </div>
+      )}
     </Link>
 
-    <div className="mt-3 flex items-center gap-1">
-      <Link
-        to={`/post/${post.slug}#comments`}
-        className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-dark-500 transition-colors hover:bg-surface-muted hover:text-dark-800 dark:hover:text-dark-200">
-        <FiMessageCircle className="text-base" />
-        {post.commentsCount ?? 0}
+    <div className="flex flex-1 flex-col p-4">
+      {post.tags?.[0] && (
+        <Link
+          to={`/explore?tag=${encodeURIComponent(post.tags[0])}`}
+          className="mb-2 inline-block w-fit rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700 hover:bg-primary-100 dark:bg-primary-950 dark:text-primary-300">
+          #{post.tags[0]}
+        </Link>
+      )}
+
+      <Link to={`/post/${post.slug}`} className="block min-w-0">
+        <h2 className="line-clamp-2 font-heading text-lg font-bold text-dark-800 transition-colors group-hover:text-primary-600 dark:text-dark-200">
+          {post.title}
+        </h2>
+        <p className="mt-2 line-clamp-2 text-sm text-dark-500">{post.excerpt}</p>
       </Link>
+
+      <div className="mt-4 flex items-center gap-2 border-t border-dark-200 pt-3 text-xs text-dark-400 dark:border-dark-700">
+        <img
+          src={post.author.avatarUrl}
+          alt={post.author.username}
+          className="h-5 w-5 shrink-0 rounded-full"
+        />
+        <Link
+          to={`/u/${post.author.username}`}
+          className="min-w-0 truncate hover:text-dark-800 dark:hover:text-dark-200">
+          {post.author.name}
+        </Link>
+        <span className="shrink-0">&middot; {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}</span>
+        <span className="ml-auto flex shrink-0 items-center gap-1">
+          <FiMessageCircle size={12} />
+          {post.commentsCount ?? 0}
+        </span>
+      </div>
     </div>
   </article>
-);
+  );
+};
 
 export default PostCard;

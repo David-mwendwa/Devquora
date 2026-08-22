@@ -236,7 +236,7 @@ const Explore = () => {
         </div>
       )}
       {status === 'ready' && results.length > 0 && (
-        <div className="flex flex-col">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {results.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}

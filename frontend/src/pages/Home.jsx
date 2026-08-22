@@ -12,6 +12,7 @@ import {
   FiUsers,
 } from 'react-icons/fi';
 import PostCard from '../components/PostCard';
+import FeaturedPost from '../components/FeaturedPost';
 import { PostListSkeleton } from '../components/PostCardSkeleton';
 import ErrorState from '../components/ErrorState';
 import TagChip from '../components/TagChip';
@@ -58,6 +59,16 @@ const Home = () => {
   );
   const writerCount = new Set(posts.map((p) => p.author.username)).size;
 
+  // A spotlight above the feed, not part of it — stays fixed to the single
+  // most-viewed post regardless of the Recent/Trending toggle below, so it
+  // doesn't jump around every time the reader flips sort order.
+  const featuredPost = posts.length
+    ? [...posts].sort((a, b) => (b.views ?? 0) - (a.views ?? 0))[0]
+    : null;
+  const gridPosts = featuredPost
+    ? sortedPosts.filter((p) => p.id !== featuredPost.id)
+    : sortedPosts;
+
   return (
     <div className="container grid grid-cols-1 gap-8 py-8 lg:grid-cols-[1fr_280px] lg:gap-0">
       <div className="lg:pr-10">
@@ -80,6 +91,19 @@ const Home = () => {
             </>
           )}
         </div>
+
+        {status === 'loading' && (
+          <div className="mb-8 grid grid-cols-1 overflow-hidden rounded-2xl border border-dark-200 dark:border-dark-700 sm:grid-cols-2">
+            <div className="skeleton aspect-[16/9] sm:aspect-auto" />
+            <div className="flex flex-col justify-center gap-3 p-8">
+              <div className="skeleton h-5 w-24 rounded-full" />
+              <div className="skeleton h-7 w-full rounded" />
+              <div className="skeleton h-7 w-2/3 rounded" />
+              <div className="skeleton mt-2 h-4 w-full rounded" />
+            </div>
+          </div>
+        )}
+        {status === 'ready' && featuredPost && <FeaturedPost post={featuredPost} />}
 
         <div className="mb-2 flex flex-wrap items-center gap-3">
           <div className="flex shrink-0 items-center gap-2">
@@ -111,7 +135,7 @@ const Home = () => {
           </div>
         </div>
 
-        {status === 'loading' && <PostListSkeleton count={5} />}
+        {status === 'loading' && <PostListSkeleton count={4} />}
         {status === 'error' && (
           <ErrorState
             message="Couldn't load posts. Please try again shortly."
@@ -119,9 +143,9 @@ const Home = () => {
           />
         )}
         {status === 'ready' && (
-          <div className="flex flex-col">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {posts.length === 0 && <p className="py-8 text-sm text-dark-500">No posts yet.</p>}
-            {sortedPosts.map((post) => (
+            {gridPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
