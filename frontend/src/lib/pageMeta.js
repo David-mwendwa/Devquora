@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import site from '../data/site.js';
+import site, { canonicalUrl } from '../data/site.js';
 
 // Patches the tags index.html ships with, rather than adding a second set.
 // Duplicate og:title tags are worse than none — a crawler picks one and it is
@@ -40,7 +40,11 @@ const usePageMeta = (title, description, { noindex = false, canonical } = {}) =>
     const desc = description || site.description;
     // Query strings produce endless near-duplicate URLs of the same page; the
     // canonical names the page, not the way the reader arrived at it.
-    const url = canonical || `${site.url}${pathname}`;
+    // The trailing-slash rule lives in canonicalUrl, because it differs between
+    // prerendered routes (which Netlify serves as a directory and redirects to)
+    // and everything else. Building it inline here silently rewrote the
+    // build's correct /about/ back to /about on any client-side navigation.
+    const url = canonical || canonicalUrl(pathname);
 
     document.title = fullTitle;
     setMeta('meta[name="description"]', desc);

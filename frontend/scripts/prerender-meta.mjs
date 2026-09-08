@@ -1,5 +1,7 @@
 // Shared by the prerender step and the build verifier, so the two cannot
 // disagree about what any given page is supposed to say.
+import { PRERENDERED_PATHS } from '../src/data/site.js';
+
 export const SITE_URL = 'https://devquora.netlify.app';
 export const SITE_NAME = 'Devquora';
 export const SITE_TAGLINE = 'Developer writing worth reading';
@@ -60,6 +62,19 @@ export const ROUTES = [
 
 export const PRERENDER_PATHS = ROUTES.map((r) => r.path);
 
+// Two lists of the same thing is one list too many, but ROUTES also carries
+// titles and descriptions the app has no use for. Keeping them separate and
+// asserting they agree costs nothing and catches the drift.
+if (
+  PRERENDERED_PATHS.length !== PRERENDER_PATHS.length ||
+  PRERENDER_PATHS.some((p) => !PRERENDERED_PATHS.includes(p))
+) {
+  throw new Error(
+    `prerender-meta: ROUTES (${PRERENDER_PATHS.join(', ')}) disagrees with ` +
+      `PRERENDERED_PATHS in src/data/site.js (${PRERENDERED_PATHS.join(', ')})`
+  );
+}
+
 export const metaForPath = (path) => ROUTES.find((r) => r.path === path);
 
 export const titleFor = (route) =>
@@ -69,7 +84,10 @@ export const titleFor = (route) =>
 // the un-slashed form is a 301, not a page. A canonical, an og:url and a
 // sitemap entry all have to name the URL that answers with a 200 — pointing
 // them at a redirect makes every one of them a weaker signal than it looks.
-export const canonicalFor = (path) => `${SITE_URL}${path === '/' ? '/' : `${path}/`}`;
+//
+// Delegated to the app's own canonicalUrl so the HTML the build writes and the
+// HTML the running app rewrites cannot disagree about the same page.
+export { canonicalUrl as canonicalFor } from '../src/data/site.js';
 
 // Paths that should never appear in a search result: everything behind a
 // session, plus the article routes, which are almost entirely syndicated from
