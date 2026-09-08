@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <!-- The card is a 1200x630 band inside a 1200x1200 square because qlmanage
+       rasterises to a square; sips crops the band back out. Edit the artwork
+       inside the translate(0,285) group and leave the frame alone.
+
+       Palette and mark are Devquora's own, read from tailwind.config.js and
+       src/components/Logo.jsx rather than invented: brass primary-400 #c6924f
+       and primary-500 #ac7938 on stone dark-800 #292524, with the same "D"
+       glyph whose three knocked-out dots make it read as a speech bubble. -->
+  <style id="fonts" />
+  <rect width="1200" height="1200" fill="#1c1917" />
+  <g transform="translate(0,285)">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#292524" />
+        <stop offset="0.55" stop-color="#1c1917" />
+        <stop offset="1" stop-color="#0c0806" />
+      </linearGradient>
+      <radialGradient id="glow" cx="0.16" cy="0.12" r="0.85">
+        <stop offset="0" stop-color="#c6924f" stop-opacity="0.30" />
+        <stop offset="1" stop-color="#c6924f" stop-opacity="0" />
+      </radialGradient>
+      <clipPath id="band">
+        <rect width="1200" height="630" />
+      </clipPath>
+    </defs>
+
+    <g clip-path="url(#band)">
+      <rect width="1200" height="630" fill="url(#bg)" />
+      <rect width="1200" height="630" fill="url(#glow)" />
+
+      <!-- Brass hairline across the top, the same accent the site uses for links. -->
+      <rect x="0" y="0" width="1200" height="5" fill="#ac7938" />
+
+      <!-- Wordmark: the drawn D + "ev/quora", exactly as Logo.jsx assembles it. -->
+      <g transform="translate(84,92) scale(1.55)">
+        <path fill="#c6924f" fill-rule="evenodd" clip-rule="evenodd"
+          d="M1 0H9.5C15.6 0 19.5 4.5 19.5 10.1C19.5 15.7 15.6 20.4 9.5 20.4H6.3L1 22Z
+             M3.7 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0
+             M8.35 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0
+             M13 10.1a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0" />
+      </g>
+      <text x="139" y="127" font-family="Inter" font-size="35" font-weight="800" letter-spacing="-0.6">
+        <tspan fill="#e7e5e4">ev</tspan><tspan fill="#c6924f" font-family="JetBrains Mono" font-weight="600" dx="3">/</tspan><tspan fill="#c6924f" dx="3">quora</tspan>
+      </text>
+
+      <text x="84" y="268" font-family="Inter" font-size="82" font-weight="800" fill="#fafaf9" letter-spacing="-2.6">Developer writing</text>
+      <text x="84" y="358" font-family="Inter" font-size="82" font-weight="800" fill="#c6924f" letter-spacing="-2.6">worth reading</text>
+
+      <text x="84" y="428" font-family="Inter" font-size="30" font-weight="400" fill="#a8a29e" letter-spacing="-0.3">Markdown-first blogging, threaded discussion,</text>
+      <text x="84" y="470" font-family="Inter" font-size="30" font-weight="400" fill="#a8a29e" letter-spacing="-0.3">and code that actually looks like code.</text>
+
+      <!-- A fenced code block, which is the thing the platform is actually about. -->
+      <g transform="translate(84,522)">
+        <rect width="337" height="46" rx="10" fill="#292524" stroke="#44403c" />
+        <text x="20" y="30" font-family="JetBrains Mono" font-size="20" font-weight="500" fill="#c6924f">```ts</text>
+        <text x="88" y="30" font-family="JetBrains Mono" font-size="20" font-weight="400" fill="#78716c">syntax highlighted</text>
+      </g>
+      <g transform="translate(445,522)">
+        <rect width="243" height="46" rx="10" fill="#292524" stroke="#44403c" />
+        <text x="20" y="30" font-family="JetBrains Mono" font-size="20" font-weight="400" fill="#78716c">threaded replies</text>
+      </g>
+    </g>
+  </g>
+</svg>

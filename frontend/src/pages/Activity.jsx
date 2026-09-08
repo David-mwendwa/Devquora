@@ -2,7 +2,7 @@ import StatCard from '../components/StatCard';
 import PostCard from '../components/PostCard';
 import ErrorState from '../components/ErrorState';
 import { PostListSkeleton } from '../components/PostCardSkeleton';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 import useAsyncData from '../hooks/useAsyncData';
 import { fetchSavedPosts, fetchReadingStats } from '../api/posts';
 
@@ -18,7 +18,7 @@ const loadActivity = () =>
   }));
 
 const Activity = () => {
-  usePageTitle('Activity');
+  usePageMeta('Activity', 'Posts you have saved, liked and commented on.', { noindex: true });
   const { data, status, error, reload } = useAsyncData(loadActivity);
 
   return (

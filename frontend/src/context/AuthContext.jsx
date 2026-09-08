@@ -4,9 +4,21 @@ import * as usersApi from '../api/users';
 
 const AuthContext = createContext();
 
+// Every localStorage read here is wrapped, because this provider renders in
+// two places without a browser around it: Node, when the public pages are
+// prerendered at build time, and a browser with site data blocked, where the
+// property exists but throws on access.
+const readStored = (key) => {
+  try {
+    return typeof localStorage === 'undefined' ? null : localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
 const getCachedUser = () => {
   try {
-    const cached = localStorage.getItem('user');
+    const cached = readStored('user');
     return cached ? JSON.parse(cached) : null;
   } catch {
     return null;
@@ -15,10 +27,17 @@ const getCachedUser = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(getCachedUser);
-  const [loading, setLoading] = useState(true);
+  // Only block on the session check when there is nothing cached to show. A
+  // returning reader already has their user in localStorage, so the app can
+  // render signed-in immediately and let /auth/me confirm it underneath —
+  // which matters here because that request can take twenty seconds while the
+  // free-tier API wakes, and every guarded route renders null until `loading`
+  // clears. The old unconditional `true` meant a cold start showed a blank
+  // page to someone whose session was perfectly valid.
+  const [loading, setLoading] = useState(() => Boolean(readStored('token')) && !getCachedUser());
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = readStored('token');
     if (!token) {
       setLoading(false);
       return;
@@ -26,8 +45,16 @@ export const AuthProvider = ({ children }) => {
 
     apiClient
       .get('/auth/me')
-      .then((res) => setUser(res.data.user))
-      .catch(() => {
+      .then((res) => {
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+      })
+      .catch((err) => {
+        // A 401 is the server saying the token is no longer good, which is the
+        // only answer that should end a session. A timeout, an offline laptop
+        // or a cold-starting API say nothing about the token's validity, and
+        // treating them as a sign-out logged people out for being on a train.
+        if (err.response?.status !== 401) return;
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);

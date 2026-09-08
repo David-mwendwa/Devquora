@@ -14,7 +14,7 @@ import {
 } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import ProfileLinks from '../components/ProfileLinks';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 import getErrorMessage from '../utils/getErrorMessage';
 
 /**
@@ -97,7 +97,7 @@ const Detail = ({ label, children }) => (
 );
 
 const Account = () => {
-  usePageTitle('Your account');
+  usePageMeta('Your account', 'Manage your Devquora profile, links and password.', { noindex: true });
   const { user, updateProfile, updatePassword } = useAuth();
 
   const [editing, setEditing] = useState(false);

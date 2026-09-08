@@ -1,8 +1,16 @@
 import { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-async-light';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { copyText } from '../lib/clipboard';
 
+// The async-light build rather than the plain `Prism` one. `Prism` registers
+// every language refractor ships — close to 300 of them, COBOL and Fortran
+// included — into the main bundle, which is most of the reason the whole app
+// used to download as a single 445 kB gzipped file. This build loads
+// refractor's core on first use and fetches one small chunk per language, so a
+// post containing only a TypeScript block pays for TypeScript and nothing
+// else. It also keeps working as the dev.to sync brings in languages nobody
+// picked in advance, which a hand-curated register list would not.
 const CodeBlock = ({ className, children }) => {
   const [copied, setCopied] = useState(false);
   const match = /language-(\w+)/.exec(className || '');

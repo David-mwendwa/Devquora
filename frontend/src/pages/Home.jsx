@@ -18,10 +18,10 @@ import ErrorState from '../components/ErrorState';
 import TagChip from '../components/TagChip';
 import { fetchPosts, fetchPostTags } from '../api/posts';
 import { useAuth } from '../context/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const Home = () => {
-  usePageTitle();
+  usePageMeta();
   const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);

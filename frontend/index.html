@@ -4,12 +4,55 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Devquora</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+
+    <title>Devquora — Developer writing worth reading</title>
+    <meta
+      name="description"
+      content="A developer-focused blogging platform: markdown-first writing, code that looks like code, threaded discussion, and a reading feed with no algorithm in the way." />
+    <link rel="canonical" href="https://devquora.netlify.app/" />
+
+    <!-- These are defaults. usePageMeta rewrites them per route, and the build
+         writes the correct values straight into each prerendered page, so a
+         crawler that never runs the JavaScript still gets the right ones. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Devquora" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://devquora.netlify.app/" />
+    <meta property="og:title" content="Devquora — Developer writing worth reading" />
+    <meta
+      property="og:description"
+      content="A developer-focused blogging platform: markdown-first writing, code that looks like code, threaded discussion, and a reading feed with no algorithm in the way." />
+    <meta property="og:image" content="https://devquora.netlify.app/og.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Devquora — markdown-first blogging for developers" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Devquora — Developer writing worth reading" />
+    <meta
+      name="twitter:description"
+      content="A developer-focused blogging platform: markdown-first writing, code that looks like code, threaded discussion, and a reading feed with no algorithm in the way." />
+    <meta name="twitter:image" content="https://devquora.netlify.app/og.jpg" />
+    <meta name="twitter:image:alt" content="Devquora — markdown-first blogging for developers" />
+
+    <!-- Inter carries every heading and paragraph above the fold, so it is the
+         one face worth blocking on; JetBrains Mono only appears inside code
+         blocks and can arrive with the article. -->
+    <link rel="preload" href="/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Devquora",
+        "url": "https://devquora.netlify.app",
+        "description": "A developer-focused blogging platform: markdown-first writing, code that looks like code, threaded discussion, and a reading feed with no algorithm in the way.",
+        "inLanguage": "en"
+      }
+    </script>
+
     <script>
       // Set the theme class before first paint so there's no light->dark flash.
       (function () {

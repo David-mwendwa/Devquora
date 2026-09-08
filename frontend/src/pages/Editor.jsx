@@ -22,7 +22,7 @@ import TagInput from '../components/TagInput';
 import { MARKDOWN_TOOLS, SHORTCUT_TOOL_IDS } from '../lib/markdownTools';
 import { markdownRehypePlugins } from '../lib/markdownRehype';
 import { cleanLiquidTags } from '../lib/liquidTags';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const WORDS_PER_MINUTE = 200;
 const TITLE_MAX = 100;
@@ -64,7 +64,7 @@ const Editor = () => {
   // replaced once an existing post loads (or after a successful save).
   const [initial, setInitial] = useState(EMPTY_DRAFT);
 
-  usePageTitle(existing ? `Edit "${existing.title}"` : 'Write a post');
+  usePageMeta(existing ? `Edit "${existing.title}"` : 'Write a post', 'Write and publish a markdown post on Devquora.', { noindex: true });
 
   const [title, setTitle] = useState(EMPTY_DRAFT.title);
   const [excerpt, setExcerpt] = useState(EMPTY_DRAFT.excerpt);

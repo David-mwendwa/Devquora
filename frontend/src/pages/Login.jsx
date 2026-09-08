@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
 import AuthLayout from '../components/AuthLayout';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const DEMO_ACCOUNTS = [
   { role: 'user', email: 'user@devquora.test', password: 'user1234' },
@@ -11,7 +11,7 @@ const DEMO_ACCOUNTS = [
 ];
 
 const Login = () => {
-  usePageTitle('Log in');
+  usePageMeta('Log in', 'Sign in to Devquora to write, comment, save posts and follow discussion. One-click demo accounts available.');
   const [prefill, setPrefill] = useState(null);
 
   return (

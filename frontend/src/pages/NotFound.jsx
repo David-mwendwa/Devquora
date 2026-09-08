@@ -1,12 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FiArrowLeft, FiCompass, FiSearch } from 'react-icons/fi';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 // The catch-all. Without it an unknown URL rendered the header and footer around
 // a completely empty <main>, which reads as the app having crashed rather than
 // as a dead link.
 const NotFound = () => {
-  usePageTitle('Page not found');
+  usePageMeta('Page not found', 'That page does not exist on Devquora.', { noindex: true });
   const { pathname } = useLocation();
 
   return (

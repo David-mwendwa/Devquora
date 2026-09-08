@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite-node scripts/prerender.mjs && node scripts/verify-build.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:client": "vite build",
+    "prerender": "vite-node scripts/prerender.mjs",
+    "verify": "node scripts/verify-build.mjs",
+    "og": "node scripts/build-og.mjs",
+    "test:prerender": "node tests/prerender.test.mjs"
   },
   "dependencies": {
-    "axios": "^1.19.0",
     "date-fns": "^4.4.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -37,11 +41,13 @@
     "autoprefixer": "^10.5.4",
     "jsdom": "^29.1.1",
     "oxlint": "^1.75.0",
+    "playwright-core": "^1.63.0",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^3.4.19",
     "vite": "^8.2.0",
+    "vite-node": "^6.0.0",
     "vitest": "^4.1.10"
   }
 }

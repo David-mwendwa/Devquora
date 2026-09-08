@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
 import AuthLayout from '../components/AuthLayout';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const Signup = () => {
-  usePageTitle('Sign up');
+  usePageMeta('Sign up', 'Create a Devquora account to publish markdown posts, join discussions and build a reading list.');
   return (
     <AuthLayout
       eyebrow="Get started"

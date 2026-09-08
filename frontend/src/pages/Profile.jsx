@@ -8,7 +8,7 @@ import { PostListSkeleton } from '../components/PostCardSkeleton';
 import ErrorState from '../components/ErrorState';
 import { fetchPosts } from '../api/posts';
 import { fetchUserProfile } from '../api/users';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 // Same role -> icon/label mapping as Dashboard.jsx, so a role badge reads
 // the same way everywhere it shows up.
@@ -33,7 +33,7 @@ const ROLE_META = {
 const Profile = () => {
   const { username } = useParams();
   const { user: signedInUser } = useAuth();
-  usePageTitle(`@${username}`);
+  usePageMeta(`@${username}`, `Posts and activity from @${username} on Devquora.`, { noindex: true });
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [status, setStatus] = useState('loading');

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
 
+import compression from 'compression';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -40,6 +41,12 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+// Ahead of everything that produces a body. The feed and the article endpoints
+// send JSON that is mostly repeated keys and prose, which is close to gzip's
+// best case — the post list compresses by roughly 4x — and the API is on a
+// free-tier host in another region, so bytes on the wire are the slow part.
+app.use(compression());
 
 app.use(helmet());
 app.use(mongoSanitize());

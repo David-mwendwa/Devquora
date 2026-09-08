@@ -1,5 +1,7 @@
-/* InkEngine fonts: Inter for UI/headings (developer-tool legibility), JetBrains Mono for code. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts (Inter for UI/headings, JetBrains Mono for code) are self-hosted and
+   loaded from index.html — see public/fonts/fonts.css. Deliberately not an
+   @import: one here would block render on a chain of cross-origin round trips
+   that has to finish before any text appears. */
 
 @tailwind base;
 @tailwind components;

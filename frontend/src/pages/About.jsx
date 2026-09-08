@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiEdit3, FiCode, FiHash, FiMessageCircle, FiArrowRight } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const FEATURES = [
   {
@@ -30,7 +30,7 @@ const FEATURES = [
 ];
 
 const About = () => {
-  usePageTitle('About');
+  usePageMeta('About', 'What Devquora is, how the reading feed works, and where its content comes from.');
   const { user } = useAuth();
 
   return (

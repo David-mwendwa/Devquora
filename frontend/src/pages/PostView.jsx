@@ -25,7 +25,7 @@ import CommentSection from '../components/CommentSection';
 import ErrorState from '../components/ErrorState';
 import { copyText } from '../lib/clipboard';
 import { markdownRehypePlugins } from '../lib/markdownRehype';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 // Varied line widths per "paragraph" so the loading state reads as prose rhythm
 // rather than a uniform stack of identical bars.
@@ -89,7 +89,21 @@ const PostView = () => {
   const [related, setRelated] = useState([]);
   const [comments, setComments] = useState([]);
   const [status, setStatus] = useState('loading');
-  usePageTitle(post?.title ?? (status === 'not-found' ? 'Post not found' : undefined));
+  // Almost everything readable here was written somewhere else and synced in
+  // from dev.to. Letting a search engine index those would put this domain in
+  // a duplicate-content contest with the article's real home — one it should
+  // lose, and one that drags the pages Devquora *did* write down with it. So a
+  // syndicated post asks not to be indexed, while still allowing its links to
+  // be followed. Netlify sends the same instruction as an X-Robots-Tag header
+  // for /post/* (see netlify.toml), which is what actually covers a crawler
+  // that never runs this JavaScript; this is the per-post rule underneath it,
+  // and it is already correct for natively written posts, which are indexable.
+  const syndicated = post?.source?.provider === 'devto';
+  usePageMeta(
+    post?.title ?? (status === 'not-found' ? 'Post not found' : undefined),
+    post?.excerpt || undefined,
+    { noindex: syndicated || status === 'not-found' }
+  );
   // Comments arrive in a second fetch, after `status` already flips to
   // 'ready' for the post itself — tracked separately so CommentSection can
   // tell "still loading" apart from "genuinely zero comments".
@@ -377,6 +391,23 @@ const PostView = () => {
                   {format(new Date(post.publishedAt), 'MMM d, yyyy')} &middot; {post.readTimeMin}{' '}
                   min read &middot; {post.views.toLocaleString()} views
                 </p>
+                {/* Says out loud where a synced article came from, and links
+                    back to it. The robots directive above keeps this copy out
+                    of search results, but that is a machine-facing signal — a
+                    reader looking at someone else's writing deserves to be
+                    told whose it is and where it lives. */}
+                {post.source?.url && post.source.provider === 'devto' && (
+                  <p className="mt-0.5 text-sm text-dark-500">
+                    Originally published on{' '}
+                    <a
+                      href={post.source.url}
+                      target="_blank"
+                      rel="noopener noreferrer external"
+                      className="font-medium text-primary-600 underline-offset-2 hover:underline">
+                      dev.to
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
 

@@ -5,7 +5,7 @@ import PostCard from '../components/PostCard';
 import { PostListSkeleton } from '../components/PostCardSkeleton';
 import ErrorState from '../components/ErrorState';
 import { fetchPosts, fetchPostTags } from '../api/posts';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 
 const SORTS = {
   recent: (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt),
@@ -13,7 +13,7 @@ const SORTS = {
 };
 
 const Explore = () => {
-  usePageTitle('Explore');
+  usePageMeta('Explore', 'Browse every post on Devquora by tag — architecture, tooling, languages and the rest of what developers are writing about.');
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTag = searchParams.get('tag');
   const q = searchParams.get('q') || '';

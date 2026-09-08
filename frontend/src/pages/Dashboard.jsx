@@ -1,6 +1,6 @@
 import { FiShield, FiEdit3 } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
+import usePageMeta from '../lib/pageMeta';
 import AuthorDashboard from './dashboard/AuthorDashboard';
 import AdminDashboard from './dashboard/AdminDashboard';
 
@@ -17,7 +17,7 @@ const ROLE_META = {
 };
 
 const Dashboard = () => {
-  usePageTitle('Dashboard');
+  usePageMeta('Dashboard', 'Your posts, drafts and readership stats.', { noindex: true });
   const { user } = useAuth();
   const roleMeta = ROLE_META[user.role];
   const RoleIcon = roleMeta.icon;

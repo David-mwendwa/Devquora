@@ -1,3 +1,9 @@
+# Netlify deploys the frontend only; the Express API lives on Render (see
+# render.yaml). Set VITE_API_BASE_URL in the Netlify UI (Site configuration →
+# Environment variables) to the Render service URL plus /api/v1 — without it
+# the build falls back to the localhost default in src/api/apiClient.js, and
+# vite.config.js also reads it to emit the API preconnect hint.
+
 [build]
   base = ""
   command = "cd frontend && npm install && npm run build"
@@ -9,7 +15,81 @@
   # without this pin.
   NODE_VERSION = "22"
 
+# Client-side routing: every unmatched path is served by the SPA shell. Must
+# stay last so real files (and /assets/*) win first.
+#
+# Deliberately not `force`d, which is what lets the prerendered pages work:
+# Netlify serves a real file in preference to an unforced redirect, so /about
+# is answered by frontend/dist/about/index.html — the copy with its own title,
+# description and rendered markup — while this rule stays the fallback for
+# everything the build did not write, which is most of the app.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Article pages are asked not to be indexed, and this header rather than a
+# meta tag is what does it: the pages are client-rendered, so a crawler that
+# does not execute JavaScript would never see a <meta name="robots">, while a
+# header arrives with the response every time.
+#
+# The reason is provenance, not quality. Essentially everything readable at
+# /post/* was written elsewhere and synced in from dev.to, and indexing it
+# would enter this domain into a duplicate-content contest with each article's
+# real home — one it deserves to lose, and one that drags down the pages
+# Devquora genuinely owns. `follow` is kept so the crawler still walks the
+# links out of these pages and discovers the rest of the site.
+#
+# When natively authored posts become the bulk of what is here, delete this
+# rule: PostView already applies the same directive per post, and only to
+# posts whose source.provider is 'devto'.
+[[headers]]
+  for = "/post/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+# Vite fingerprints everything under /assets, so it can be cached forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The HTML is never cached: it names the fingerprinted asset files, so a stale
+# copy pins a reader to a deploy that no longer exists. Every prerendered route
+# is its own index.html and needs the same treatment — /about is a file now,
+# not a redirect to one.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-store, must-revalidate"
+
+[[headers]]
+  for = "/*/index.html"
+  [headers.values]
+    Cache-Control = "no-store, must-revalidate"
+
+# Fonts are self-hosted (see frontend/public/fonts) and their contents never
+# change under a given filename — a new subset gets a new name. They are also
+# on the critical path for first paint, so they are the assets most worth
+# never fetching twice.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# The unfurl image, fetched by every service that renders a shared link. A day
+# rather than a year: it is not fingerprinted, and a redesigned card that stays
+# stale in Slack's cache for a year is worse than one extra request.
+[[headers]]
+  for = "/og.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

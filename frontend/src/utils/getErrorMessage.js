@@ -1,7 +1,11 @@
-// Turns an axios error into a message worth showing a user. The backend's errorHandler
+// Turns a rejected API call into a message worth showing a user. The backend's errorHandler
 // sends { message } on normal errors, but some failures never reach it — express-rate-limit
 // responses, a dead backend (ECONNREFUSED), a request that times out — so each of those
 // needs its own fallback instead of collapsing to a generic "Something went wrong".
+//
+// The shape it reads (`err.response`, `err.request`, `err.code`) is axios's. The client is
+// plain fetch now, and api/apiClient.js reproduces that shape deliberately so this file and
+// its callers did not all have to change with it.
 const getErrorMessage = (err) => {
   if (err.response) {
     const { status, data } = err.response;
