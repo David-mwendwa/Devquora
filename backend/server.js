@@ -39,7 +39,11 @@ mongoose
     process.exit(1);
   });
 
-const PORT = process.env.PORT || 5000;
+// 5001, never 5000: macOS AirPlay Receiver holds 5000, so a fallback of 5000
+// fails to bind on this machine whenever PORT is unset — a fresh clone, or a
+// host that does not set it. Every backend in this workspace picks its own
+// port above 5000 for exactly this reason.
+const PORT = process.env.PORT || 5001;
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
