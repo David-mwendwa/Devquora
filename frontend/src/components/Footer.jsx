@@ -27,7 +27,7 @@ const Footer = () => {
           <span className="text-dark-400">
             Developed by{' '}
             <a
-              href="https://techdave.netlify.app/"
+              href="https://techdave.dev/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 font-semibold text-primary-600 transition-colors duration-150 hover:text-primary-500">
